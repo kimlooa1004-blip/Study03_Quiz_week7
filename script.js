@@ -1,7 +1,8 @@
 // ===== 로직: DOM을 모르는 순수 함수. Node 테스트에서도 불러온다 =====
 
 const CATEGORIES = ['한국사', '세계지리', '과학', '예술과 문화'];
-const QUESTIONS_PER_GAME = 10;
+// 한 판은 카테고리의 문항 전부다. 카테고리마다 문항 수는 같아야 하고, 이 값보다 적으면 그 카테고리는 시작하지 못한다.
+const MIN_QUESTIONS = 10;
 const SPEED_SECONDS = 15;
 
 // 과제 제출용: 페이지 맨 위에 보여 줄 학번과 이름. 여기만 고치면 된다.
@@ -19,10 +20,26 @@ function shuffle(arr, rng = Math.random) {
 // 카테고리의 문항을 순서와 보기 모두 섞은 새 객체로 돌려준다. answer는 섞인 choices 기준으로 다시 계산한다.
 function pickQuestions(all, category, rng = Math.random) {
   const pool = (all || []).filter((q) => q.category === category);
-  if (pool.length < QUESTIONS_PER_GAME) {
+  if (pool.length < MIN_QUESTIONS) {
     throw new Error(`문항 데이터를 불러올 수 없음: ${category} (${pool.length}개)`);
   }
-  return shuffle(pool, rng).slice(0, QUESTIONS_PER_GAME).map((q) => shuffleChoices(q, rng));
+  return shuffle(pool, rng).map((q) => shuffleChoices(q, rng));
+}
+
+// 카테고리마다 문항 수가 같은지 점검한다. 기준은 최소 문항 수 이상인 카테고리들이 가장 많이 가진 수(최빈값, 동률이면 큰 값)다.
+function checkCategoryCounts(list) {
+  const counts = CATEGORIES.map((c) => (list || []).filter((q) => q.category === c).length);
+  const freq = new Map();
+  counts.filter((n) => n >= MIN_QUESTIONS).forEach((n) => freq.set(n, (freq.get(n) || 0) + 1));
+  let base = 0;
+  let best = -1;
+  freq.forEach((times, n) => { if (times > best || (times === best && n > base)) { best = times; base = n; } });
+  const errors = [];
+  CATEGORIES.forEach((c, i) => {
+    if (counts[i] < MIN_QUESTIONS) errors.push(`${c}: 문항이 ${counts[i]}개 (최소 ${MIN_QUESTIONS}개)`);
+    else if (counts[i] !== base) errors.push(`${c}: 문항 수 ${counts[i]}개 (다른 카테고리와 같은 ${base}개여야 함)`);
+  });
+  return errors;
 }
 
 function shuffleChoices(q, rng) {
@@ -245,7 +262,7 @@ function initUI() {
   const viewNames = ['start', 'mode', 'question', 'result', 'leaderboard'];
   let mode = null;
   let category = null;
-  let rootGame = null; // 처음 10문제 판. 점수는 이 판의 결과만 인정한다
+  let rootGame = null; // 처음 판. 점수는 이 판의 결과만 인정한다
   let game = null;     // 지금 풀고 있는 판(다시 풀기 라운드일 수 있다)
   let stopTimer = () => {};
 
@@ -433,7 +450,7 @@ function initUI() {
     show('result');
   }
 
-  // 처음 10문제의 문항별 정답·오답 목록
+  // 처음 판의 문항별 정답·오답 목록
   function renderResultList() {
     const list = $('result-list');
     list.textContent = '';
@@ -699,8 +716,13 @@ function selfCheck(questions, log) {
 
   // --- 문항 데이터 ---
   check('data: 문항 규칙 위반이 없다', same(validateQuestions(all), []));
-  check('data: 문항은 40개', all.length === 40);
-  CATEGORIES.forEach((c) => check(`data: ${c}는 10문항`, all.filter((q) => q.category === c).length === 10));
+  check('data: 카테고리마다 문항 수가 같다', same(checkCategoryCounts(all), []) && all.length > 0);
+  const mk = (c, n) => Array.from({ length: n }, (_, i) => ({ category: c }));
+  const evenSet = (n) => CATEGORIES.flatMap((c) => mk(c, n));
+  check('data: 카테고리마다 12개여도 통과', same(checkCategoryCounts(evenSet(12)), []));
+  check('data: 문항이 0개면 오류', checkCategoryCounts([]).length === CATEGORIES.length);
+  check('data: 한 카테고리만 채우면 오류', checkCategoryCounts(mk('한국사', 10)).length === 3);
+  check('data: 한 카테고리만 수가 다르면 그 카테고리가 오류', same(checkCategoryCounts(evenSet(10).concat(mk('과학', 1))).map((m) => m.slice(0, 2)), ['과학']));
   const good = { id: 'x-01', category: '과학', question: '물은 1기압에서 몇 도에서 끓는가?', choices: ['a', 'b', 'c', 'd'], answer: 2, explanation: '설명', source: '기관 https://example.org' };
   const bad = (patch) => validateQuestions([Object.assign({}, good, patch)]).length >= 1;
   check('data: 검사기가 정상 문항을 통과시킨다', same(validateQuestions([good]), []));
@@ -720,7 +742,7 @@ function selfCheck(questions, log) {
   const shuffled = shuffle(src, seeded(7));
   check('game: shuffle은 원본을 바꾸지 않고 같은 원소를 가진다', same(src, [1, 2, 3, 4, 5, 6]) && same(shuffled.slice().sort(), src));
   const picked = pickQuestions(all, '과학', seeded(3));
-  check('game: pickQuestions는 그 카테고리 10문항', picked.length === 10 && picked.every((q) => q.category === '과학'));
+  check('game: pickQuestions는 그 카테고리 문항 전부', picked.length === all.filter((q) => q.category === '과학').length && picked.every((q) => q.category === '과학'));
   const byId = new Map(all.map((q) => [q.id, q]));
   let choicesOk = true;
   for (let seed = 1; seed <= 50; seed++) {
@@ -734,8 +756,8 @@ function selfCheck(questions, log) {
   pickQuestions(all, '세계지리', seeded(9));
   check('game: pickQuestions는 원본을 바꾸지 않는다', JSON.stringify(all) === before);
   let threw = false;
-  try { pickQuestions(all.filter((q) => q.category === '과학').slice(0, 9), '과학'); } catch (e) { threw = true; }
-  check('game: 문항이 9개뿐이면 Error', threw);
+  try { pickQuestions(all.filter((q) => q.category === '과학').slice(0, MIN_QUESTIONS - 1), '과학'); } catch (e) { threw = true; }
+  check(`game: 문항이 ${MIN_QUESTIONS - 1}개뿐이면 Error`, threw);
   check('game: scoreFor 연습/스피드', scoreFor('practice', true, false) === 1 && scoreFor('practice', false, false) === 0 && scoreFor('speed', true, false) === 1);
   let g = newGame('practice', '과학');
   const q0 = g.questions[0];
@@ -750,7 +772,7 @@ function selfCheck(questions, log) {
   nextQuestion(g);
   check('game: 답하기 전 nextQuestion은 이동하지 않는다', g.index === 0);
   g = play(newGame('practice', '과학'));
-  check('game: 10문제를 풀면 끝나고 10점', isFinished(g) && g.score === 10 && answer(g, 0) === null);
+  check('game: 문항을 다 풀면 끝나고 만점', isFinished(g) && g.score === g.questions.length && answer(g, 0) === null);
   g = newGame('practice', '과학');
   answer(g, g.questions[0].answer);
   nextQuestion(g);
@@ -897,7 +919,7 @@ if (typeof document !== 'undefined') {
 
 if (typeof module !== 'undefined' && module.exports) {
   module.exports = {
-    CATEGORIES, SPEED_SECONDS, shuffle, pickQuestions, scoreFor, createGame, answer, timeout, useHint,
+    CATEGORIES, SPEED_SECONDS, MIN_QUESTIONS, checkCategoryCounts, shuffle, pickQuestions, scoreFor, createGame, answer, timeout, useHint,
     nextQuestion, isFinished, wrongQuestions, retryGame, startTimer,
     LEADERBOARD_KEY, getStorage, getTop, addRecord, formatDate, validateQuestions, selfCheck
   };
