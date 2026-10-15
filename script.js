@@ -861,7 +861,7 @@ function selfCheck(questions, log) {
   const scoreBefore = g.score;
   const resultsBefore = JSON.stringify(g.results);
   play(r1);
-  check('retry: 다시 풀어도 원래 점수·결과는 그대로', scoreBefore === 8 && g.score === 8 && JSON.stringify(g.results) === resultsBefore);
+  check('retry: 다시 풀어도 원래 점수·결과는 그대로', scoreBefore === g.questions.length - 2 && g.score === scoreBefore && JSON.stringify(g.results) === resultsBefore);
   g = play(newGame('practice', '한국사', 5), [0, 1, 2]);
   const ra = retryGame(g);
   const stillWrong = ra.questions[1].id;
