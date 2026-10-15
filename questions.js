@@ -261,8 +261,8 @@ const QUESTIONS = [
     id: 'science-07',
     category: '과학',
     question: '우주 공간 대부분에서 소리가 전달되지 않는 까닭은?',
-    choices: ['빛이 너무 강해서', '소리를 전달할 매질이 거의 없어서', '중력이 없어서', '온도가 너무 높아서'],
-    answer: 1,
+    choices: ['빛이 너무 강해서 소리가 묻히기 때문', '중력이 약해서 소리가 흩어지기 때문', '온도가 너무 높아서 소리가 약해지기 때문', '소리를 전달할 매질이 거의 없기 때문'],
+    answer: 3,
     explanation: '소리는 물질을 통해 전달되는 역학적 파동이라 우주 대부분의 진공에는 전달해 줄 매질이 없다.',
     source: 'NASA, "New NASA Black Hole Sonifications with a Remix" https://www.nasa.gov/universe/new-nasa-black-hole-sonifications-with-a-remix/ ; Britannica, "Wave" https://www.britannica.com/science/wave-physics'
   },
@@ -308,8 +308,8 @@ const QUESTIONS = [
     id: 'culture-01',
     category: '예술과 문화',
     question: '프랑스 루브르 박물관에 걸려 있는 「모나리자」를 그린 화가는?',
-    choices: ['레오나르도 다 빈치', '미켈란젤로', '라파엘로', '렘브란트'],
-    answer: 0,
+    choices: ['미켈란젤로 부오나로티', '라파엘로 산치오', '렘브란트 판 레인', '레오나르도 다 빈치'],
+    answer: 3,
     explanation: '레오나르도 다 빈치가 1503년경 그리기 시작해 1519년 죽을 때까지 손질한 작품이다.',
     source: 'Britannica, "Mona Lisa" https://www.britannica.com/topic/Mona-Lisa-painting ; Louvre https://www.louvre.fr/en/explore/the-palace/from-the-mona-lisa-to-the-wedding-feast-at-cana'
   },
@@ -335,8 +335,8 @@ const QUESTIONS = [
     id: 'culture-04',
     category: '예술과 문화',
     question: '덴마크 왕자의 복수를 그린 비극 『햄릿』을 쓴 작가는?',
-    choices: ['괴테', '윌리엄 셰익스피어', '몰리에르', '도스토옙스키'],
-    answer: 1,
+    choices: ['요한 볼프강 폰 괴테', '장 바티스트 몰리에르', '표도르 도스토옙스키', '윌리엄 셰익스피어'],
+    answer: 3,
     explanation: '『햄릿』은 셰익스피어가 1599~1601년경 쓴 5막 비극이며 1603년 사절판으로 처음 출간되었다.',
     source: 'Britannica, "Hamlet" https://www.britannica.com/topic/Hamlet-by-Shakespeare ; Folger https://www.folger.edu/explore/shakespeares-works/hamlet/'
   },
@@ -353,8 +353,8 @@ const QUESTIONS = [
     id: 'culture-06',
     category: '예술과 문화',
     question: '작곡가 모차르트가 태어난 도시는?',
-    choices: ['빈', '잘츠부르크', '베를린', '프라하'],
-    answer: 1,
+    choices: ['빈', '라이프치히', '프라하', '잘츠부르크'],
+    answer: 3,
     explanation: '모차르트는 1756년 1월 27일 잘츠부르크에서 태어나 1791년 빈에서 세상을 떠났다.',
     source: 'Britannica, "Wolfgang Amadeus Mozart Facts" https://www.britannica.com/facts/Wolfgang-Amadeus-Mozart'
   },
