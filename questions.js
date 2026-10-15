@@ -91,6 +91,15 @@ const QUESTIONS = [
     explanation: '1865년 신정왕후가 경복궁 중건을 명하며 총책임을 흥선대원군에게 맡겼다.',
     source: '한국민족문화대백과사전 「경복궁」 https://encykorea.aks.ac.kr/Article/E0002434'
   },
+  {
+    id: 'history-11',
+    category: '한국사',
+    question: '일본이 항복하고 우리나라가 일제의 식민통치에서 벗어난 8·15 광복의 해는?',
+    choices: ['1943년', '1945년', '1948년', '1950년'],
+    answer: 1,
+    explanation: '일본이 항복한 1945년 8월 15일 우리나라는 일제 식민통치에서 벗어났다.',
+    source: '한국민족문화대백과사전 「8·15광복」 https://encykorea.aks.ac.kr/Article/E0059769'
+  },
 
   // ===== 세계지리 =====
   {
@@ -182,6 +191,15 @@ const QUESTIONS = [
     answer: 0,
     explanation: '도버 해협은 영국해협의 동쪽 끝으로 잉글랜드의 도버와 프랑스의 칼레를 가르며 영국해협과 북해를 잇는다.',
     source: 'Britannica, "English Channel summary" https://www.britannica.com/summary/English-Channel'
+  },
+  {
+    id: 'geography-11',
+    category: '세계지리',
+    question: '오늘날 일본의 수도는?',
+    choices: ['오사카', '교토', '도쿄', '요코하마'],
+    answer: 2,
+    explanation: '도쿄는 일본의 수도이며 1868년까지는 에도라고 불렸다.',
+    source: 'Britannica, "Tokyo summary" https://www.britannica.com/summary/Tokyo'
   },
 
   // ===== 과학 =====
@@ -275,6 +293,15 @@ const QUESTIONS = [
     explanation: '뉴턴은 1687년 『자연철학의 수학적 원리(프린키피아)』에서 만유인력의 법칙과 3가지 운동 법칙을 제시했다.',
     source: 'Britannica, "Principia" https://www.britannica.com/topic/Principia'
   },
+  {
+    id: 'science-11',
+    category: '과학',
+    question: '사람의 심장을 이루는 방(심방과 심실)은 모두 몇 개인가?',
+    choices: ['4개', '2개', '3개', '6개'],
+    answer: 0,
+    explanation: '심장은 위쪽 심방 2개와 아래쪽 심실 2개, 모두 4개의 방으로 이뤄진다.',
+    source: 'NHLBI, "How the Heart Works - What the Heart Looks Like" https://www.nhlbi.nih.gov/health/heart/anatomy'
+  },
 
   // ===== 예술과 문화 =====
   {
@@ -366,6 +393,15 @@ const QUESTIONS = [
     answer: 1,
     explanation: '종묘는 정전과 영녕전이 원형대로 보존되어 1995년 12월 세계유산이 되었다.',
     source: '국가유산청 국가유산포털 「종묘」 https://www.heritage.go.kr/heri/html/HtmlPage.do?pg=%2Funesco%2FHeritage%2FHeritage_03.jsp&pageNo=1_1_1_0 ; 한국민족문화대백과사전 https://encykorea.aks.ac.kr/Article/E0052928'
+  },
+  {
+    id: 'culture-11',
+    category: '예술과 문화',
+    question: '한국의 「아리랑」이 유네스코 인류무형문화유산 대표 목록에 오른 해는?',
+    choices: ['2003년', '2009년', '2012년', '2018년'],
+    answer: 2,
+    explanation: '아리랑은 2012년 유네스코 인류무형문화유산 대표 목록에 올랐다.',
+    source: 'UNESCO ICH, "Arirang, lyrical folk song in the Republic of Korea" https://ich.unesco.org/en/RL/arirang-lyrical-folk-song-in-the-republic-of-korea-00445'
   }
 ];
 
